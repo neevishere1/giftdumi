@@ -1,123 +1,142 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Troll Gift</title>
+    <title>50 Win Celebration</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
             font-family: Arial, sans-serif;
+            background: url('https://i.gifer.com/TVzk.gif') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            overflow: hidden;
             flex-direction: column;
         }
-
-        /* Initial Text Style */
-        .text {
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
+        .question-container, .final-screen, .letter-screen {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
         }
-
-        /* Gift Box Styles */
-        .gift-box {
+        .question-container input {
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .question-container button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        .final-screen, .letter-screen {
             display: none;
-            width: 200px;
-            height: 200px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 10;
+            text-align: center;
+        }
+        .giftbox {
+            width: 150px;
+            height: 150px;
             background-color: #e9b100;
+            border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
             cursor: pointer;
-            position: relative;
+            color: white;
             transition: transform 0.3s ease;
         }
-
-        .gift-box:hover {
+        .giftbox:hover {
             transform: scale(1.1);
         }
-
-        /* Animation for gift box reveal */
-        .gift-box h3 {
-            font-size: 18px;
-            color: #fff;
-        }
-
-        /* GIF display style */
-        .gif-container {
-            display: none;
-            width: 200px;
-            height: 200px;
-            background-size: cover;
-            background-position: center;
+        .letter {
+            background: white;
+            color: black;
+            padding: 20px;
             border-radius: 10px;
-            transition: opacity 0.3s ease;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in-out;
         }
-
-        /* Animation for GIF reveal */
-        .gif-container.show {
-            display: block;
-            opacity: 1;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-
-    <!-- Starting Text -->
-    <div class="text" id="startingText">
-        Acest cadou a fost facut cu multa pasiune si respect di catre nikalai pentru dumi
+    <div class="question-container" id="questionScreen">
+        <h2>Care-i activitatea mea preferata?</h2>
+        <input type="text" id="answerInput" placeholder="Scrie raspunsul aici..." />
+        <button onclick="checkAnswer()">Trimite</button>
+        <div class="error-message" id="errorMessage"></div>
     </div>
 
-    <!-- Gift Box -->
-    <div class="gift-box" id="giftBox">
-        <h3>Click me!</h3>
+    <div class="final-screen" id="finalScreen" style="background-image: url('40a3da163b4c173b3f36eff55fb41faf.png');">
+        <div class="giftbox" onclick="showLetter()">🎁</div>
     </div>
 
-    <!-- GIF Container -->
-    <div class="gif-container" id="gifContainer"></div>
+    <div class="letter-screen" id="letterScreen" style="background-image: url('40a3da163b4c173b3f36eff55fb41faf.png');">
+        <div class="letter" onclick="redirectToYouTube()">
+            Multumesc din tat sufletu ca ai petrecut aceste 50 de zile pe TikTok trimitzanduni tiktokuri sh raspunzand,
+            o fost foarte amuzante sh chiar pot spune c mo facut s rad in cele mai grele momente ale vietii, la cat mai multe !
+            <br><br><em>(Click anywhere on this letter to continue)</em>
+        </div>
+    </div>
 
     <script>
-        // Define the GIFs you want to cycle through
-        const gifs = [
-            'https://media.giphy.com/media/xT5LMD3w3GPlft8EwY/giphy.gif', // Example GIF 1
-            'https://media.giphy.com/media/3oEdv8FFxtMF4UBHDo/giphy.gif', // Example GIF 2
-            'https://media.giphy.com/media/xT1XGSYV9l4jwXHK0k/giphy.gif'  // Example GIF 3
-        ];
+        const correctAnswers = ["s ti chisi", "chisatu", "peeing", "pisatul"];
 
-        let currentGifIndex = 0; // Track the current gif index
+        function checkAnswer() {
+            const input = document.getElementById("answerInput").value.trim().toLowerCase();
+            const errorMessage = document.getElementById("errorMessage");
+            if (correctAnswers.includes(input)) {
+                document.getElementById("questionScreen").style.display = "none";
+                document.getElementById("finalScreen").style.display = "flex";
+            } else {
+                errorMessage.textContent = "Activitatea nu-i corecta sau nu-i scrisa corect, mai incearca";
+            }
+        }
 
-        // Elements
-        const startingText = document.getElementById('startingText');
-        const giftBox = document.getElementById('giftBox');
-        const gifContainer = document.getElementById('gifContainer');
+        function showLetter() {
+            document.getElementById("finalScreen").style.display = "none";
+            document.getElementById("letterScreen").style.display = "flex";
+        }
 
-        // Show the gift box after text is clicked
-        startingText.addEventListener('click', function() {
-            startingText.style.opacity = 0;
-            setTimeout(() => {
-                startingText.style.display = 'none';
-                giftBox.style.display = 'flex';
-            }, 300);  // Wait for fade-out effect
-        });
-
-        // Reveal GIF when gift box is clicked
-        giftBox.addEventListener('click', function() {
-            // Show the gif container with current gif
-            gifContainer.style.backgroundImage = `url('${gifs[currentGifIndex]}')`;
-            gifContainer.classList.add('show');
-
-            // Update the gif index for next click
-            currentGifIndex = (currentGifIndex + 1) % gifs.length;
-        });
+        function redirectToYouTube() {
+            window.location.href = "https://www.youtube.com/watch?v=mO4AcEa8DPA";
+        }
     </script>
-
 </body>
 </html>
