@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troll Gift</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Initial Text Style */
+        .text {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Gift Box Styles */
+        .gift-box {
+            display: none;
+            width: 200px;
+            height: 200px;
+            background-color: #e9b100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        /* Animation for gift box reveal */
+        .gift-box h3 {
+            font-size: 18px;
+            color: #fff;
+        }
+
+        /* GIF display style */
+        .gif-container {
+            display: none;
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Animation for GIF reveal */
+        .gif-container.show {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Starting Text -->
+    <div class="text" id="startingText">
+        Acest cadou a fost facut cu multa pasiune si respect di catre nikalai pentru dumi
+    </div>
+
+    <!-- Gift Box -->
+    <div class="gift-box" id="giftBox">
+        <h3>Click me!</h3>
+    </div>
+
+    <!-- GIF Container -->
+    <div class="gif-container" id="gifContainer"></div>
+
+    <script>
+        // Define the GIFs you want to cycle through
+        const gifs = [
+            'https://media.giphy.com/media/xT5LMD3w3GPlft8EwY/giphy.gif', // Example GIF 1
+            'https://media.giphy.com/media/3oEdv8FFxtMF4UBHDo/giphy.gif', // Example GIF 2
+            'https://media.giphy.com/media/xT1XGSYV9l4jwXHK0k/giphy.gif'  // Example GIF 3
+        ];
+
+        let currentGifIndex = 0; // Track the current gif index
+
+        // Elements
+        const startingText = document.getElementById('startingText');
+        const giftBox = document.getElementById('giftBox');
+        const gifContainer = document.getElementById('gifContainer');
+
+        // Show the gift box after text is clicked
+        startingText.addEventListener('click', function() {
+            startingText.style.opacity = 0;
+            setTimeout(() => {
+                startingText.style.display = 'none';
+                giftBox.style.display = 'flex';
+            }, 300);  // Wait for fade-out effect
+        });
+
+        // Reveal GIF when gift box is clicked
+        giftBox.addEventListener('click', function() {
+            // Show the gif container with current gif
+            gifContainer.style.backgroundImage = `url('${gifs[currentGifIndex]}')`;
+            gifContainer.classList.add('show');
+
+            // Update the gif index for next click
+            currentGifIndex = (currentGifIndex + 1) % gifs.length;
+        });
+    </script>
+
+</body>
+</html>
